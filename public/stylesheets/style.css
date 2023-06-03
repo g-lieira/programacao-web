@@ -1,0 +1,25 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a.link {
+  color: #00B7FF;
+  cursor: pointer !important;
+}
+
+.oculto {
+  display: none;
+}
+
+.alta { 
+  background-color: red;
+}
+
+.media {
+  background-color: yellow;
+}
+
+.baixa {
+  background-color: green;
+}
