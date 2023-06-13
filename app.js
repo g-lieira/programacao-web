@@ -1,27 +1,17 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+require("dotenv").config();
 
-var app = express();
+const express = require("express");
+const app = express();
 
-// view engine setup
-var mustacheExpress = require("mustache-express");
-var engine = mustacheExpress();
-app.engine("mustache", engine);
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'mustache');
+app.get("/api", (req, res)=>{
+    res.json({
+        success: 1,
+        message: "API REST"
+    });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+});
 
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/tasks');
-var loginRouter = require('./routes/login')
-
-app.use('/', indexRouter)
-app.use('/api/tasks', apiRouter)
-app.use('/api', loginRouter)
-
-module.exports = app;
+app.listen(process.env.APP_PORT, ()=>{
+    console.log("Running...", process.env.APP_PORT);
+});
