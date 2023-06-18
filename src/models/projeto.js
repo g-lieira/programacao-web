@@ -21,8 +21,9 @@ const projeto = sequelize.define('projetos', { //define o nome da tabela
     description: {
         type: DataTypes.STRING,
     }
+   
 }, {
-    timestamps: true
+    timestamps: false
 });
 
 projeto.hasMany(tarefas, {

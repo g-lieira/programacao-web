@@ -2,7 +2,7 @@ const DataTypes = require("sequelize");
 
 const sequelize = require("../database/database");
 
-const tarefa = sequelize.define('tarefas', {
+const tarefa = sequelize.define("tarefas", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -12,10 +12,11 @@ const tarefa = sequelize.define('tarefas', {
         type: DataTypes.STRING
     },
     done: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
-    timestamp: true
+    timestamps: false
 });
 
 module.exports = tarefa;

@@ -1,7 +1,11 @@
 const Sequelize = require("sequelize");
 
 //banco de dados criado no pgadmin
-const sequelize = new Sequelize('prog-web', 'postgres', 'glieira009', {
+const sequelize = new Sequelize(
+    'prog-web', //nome db
+    'postgres', //user
+    'glieira009', //senha
+    {
     host: 'localhost',
     dialect: 'postgres'
 });
