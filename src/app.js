@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
-
 const projetosRoutes = require('./routes/projetos.routes');
 
+//middlewares
+app.use(express.json());
+
+//chama as rotas
 app.use(projetosRoutes);
 
 
@@ -10,6 +13,7 @@ app.use(projetosRoutes);
 
 
 
+//execução
 
 const sequelize = require("./database/database");
 // var db = require("./database/database"), sequelize=db.sequelize;
@@ -26,6 +30,5 @@ async function main() {
         console.error("erro bd", error);
     }
 }
-
 main();
 
