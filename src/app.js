@@ -22,6 +22,8 @@ app.use(userRoutes);
 app.use(adminRoutes);
 
 
+
+
 async function main(){
         await sequelize.sync({force: true});
         //sync -> cria campos não existentes, tipo para ver a ultima modificação feita

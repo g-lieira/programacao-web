@@ -9,11 +9,12 @@ const {
     loginAdmins
 } = require('../controllers/admin.controller');
 
-router.post('/admin', createAdmins);
+
+router.post('/admin',  createAdmins); //adicionar o auth.controlaAcessoAdmin
 
 router.delete('/admin/:id', auth.controlaAcessoAdmin, deleteAdmins);
 
-router.post('/admin/login', auth.controlaAcessoAdmin, loginAdmins);
+router.post('/admin/login', loginAdmins);
 
 
 module.exports = router;

@@ -17,7 +17,7 @@ const auth = require('../helpers/auth');
 router.post("/projetos", auth.controlaAcessoAdmin, createProjetos)
 
 //pegar todos os projetos
-router.get("/projetos", auth.controlaAcesso, getProjetos)
+router.get("/projetos", auth.controlaAcesso, auth.controlaAcessoAdmin, getProjetos)
 
 //atualizar um único projeto, precisa passar id 
 router.put("/projetos/:id", auth.controlaAcessoAdmin, updateProjetos)
@@ -26,8 +26,9 @@ router.put("/projetos/:id", auth.controlaAcessoAdmin, updateProjetos)
 router.delete("/projetos/:id", auth.controlaAcessoAdmin, deleteProjetos)
 
 //pegar um só projeto indicando o id
-router.get("/projetos/:id", auth.controlaAcesso, getProjeto)
+router.get("/projetos/:id", auth.controlaAcesso, auth.controlaAcessoAdmin, getProjeto)
 
-router.get("/projetos/:id/tasks", auth.controlaAcesso, getProjetoTarefa)
+//ver as tarefas relacionadas a aquele objeto
+router.get("/projetos/:id/tasks", auth.controlaAcesso, auth.controlaAcessoAdmin, getProjetoTarefa)
 
 module.exports = router;

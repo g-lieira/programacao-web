@@ -1,5 +1,6 @@
 const user = require('../models/user');
 
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -45,7 +46,7 @@ module.exports = {
                                     error: err
                                 });
                             });
-            
+                            
                         }
                     });
                     
@@ -75,6 +76,18 @@ module.exports = {
         
     },
 
+    getUsers: async(req, res) => {
+        try{
+            const users = await user.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
+            res.json(users);
+            
+        }catch (error) {
+            return res.status(500).json({
+                message: error.message
+            });
+        }
+    },
+
     deleteUsers: async(req, res) => {
         const {id} = req.params;
         try {
@@ -88,6 +101,45 @@ module.exports = {
             });
         }
     },
+
+    updateUsers: async(req, res) => {
+        const {id} = req.params;
+
+        try {
+            const users = await user.findOne({
+                where: {id}
+            });
+            users.set(req.body);
+            await users.save();
+            return res.json(users);
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
+        }
+    },
+
+    /*
+    updateMyUser: async(req, res) => {
+        const {id} = req.params;
+
+        if (req.body.id !== parseInt(id)) {
+            return res.status(403).json({ message: 'Acesso negado' });
+        }
+        
+        try {
+            const users = user.findOne({
+                where: {id}
+            });
+            users.set(req.body);
+            users.save();
+            return res.json(users);
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
+        }
+    },*/
 
     loginUsers: async(req, res) => {
         user.findOne({
