@@ -2,40 +2,28 @@ const DataTypes = require("sequelize");
 
 const sequelize = require("../database/database");
 
-module.exports = {
-    /*create: sequelize.define("users", {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true
-        },
-        name: {
-            type: DataTypes.STRING
-        },
-        email: {
-            type: DataTypes.STRING
-        },
-        password: {
-            type: DataTypes.STRING
-        }
-    }),*/
-
-    create: (dados, retorna) => {
-        sequelize.query (
-            `insert into registration(name, genero, email, senha)
-                    values(?, ?, ?, ?)`,
-            [
-                dados.name,
-                dados.genero,
-                dados.email,
-                dados.senha
-            ],
-            (error, results, campos) => {
-                if(error){
-                    retorna(error);
-                }
-                return retorna(null, results)
-            }
-        );
+const users = sequelize.define("users", {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    name: {
+        type: DataTypes.STRING
+    },
+    email: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true,
+        //regex para que seja inserido um email válido
+        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    },
+    password: {
+        type: DataTypes.STRING,
+        required: true
     }
+}, {
+    timestamps: false
+});
 
-}
+module.exports = users;

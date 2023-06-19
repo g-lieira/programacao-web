@@ -8,6 +8,7 @@ const sequelize = require("./database/database");
 //importando rotas
 const projetosRoutes = require('./routes/projetos.routes');
 const tarefasRoutes = require('./routes/tarefas.routes');
+const userRoutes = require('./routes/user.routes');
 
 
 //middlewares
@@ -16,19 +17,17 @@ app.use(express.json());
 //chama as rotas
 app.use(projetosRoutes);
 app.use(tarefasRoutes);
+app.use(userRoutes);
 
 
-app.get("/api", async(req, res) => {
+async function main(){
         await sequelize.sync({force: true});
         //sync -> cria campos não existentes, tipo para ver a ultima modificação feita
         //force -> toda vez exclui esses campos não existentes e cria novamente
 
-        res.json({
-                success:1,
-                message: 'funcionando login'
+        app.listen(process.env.APP_PORT, () => {
+                console.log("running..PORT", process.env.APP_PORT)
         });
-});
+}
 
-app.listen(process.env.APP_PORT, () => {
-        console.log("running..PORT", process.env.APP_PORT)
-});
+main();
