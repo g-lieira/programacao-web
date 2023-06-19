@@ -9,9 +9,9 @@ const {
 
 router.post('/user', createUsers);
 
-router.post('/login', loginUsers);
-
 router.delete('/user/:id', deleteUsers);
+
+router.post('/login', loginUsers);
 
 
 module.exports = router;

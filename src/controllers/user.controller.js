@@ -1,6 +1,7 @@
 const user = require('../models/user');
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
 
@@ -94,12 +95,37 @@ module.exports = {
                 email: req.body.email
             }
         }).then(User => {
-            if(User){ 
+            if(!User){ 
                 return res.status(401).json({ 
-                    message: 'Falha na autenticação' 
+                    message: 'Falha na autenticação 1' 
                 });
             }
-        }).catch()
+            bcrypt.compare(req.body.password, User.password, (err, result) => {
+                if(err || !result){
+                    return res.status(401).json({
+                        message: 'Falha na autenticação 2'
+                    });
+                }
+                if(result){
+                    const token = jwt.sign({
+                        email: User.email
+                    }, 
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: "1h"
+                    });
+                    return res.status(200).json({
+                        message: 'Autenticação sucedida',
+                        token: token
+                    })
+                }
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }) 
     }
 
 
