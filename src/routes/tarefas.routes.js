@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const auth = require('../helpers/auth');
+
 const {
     getTarefas,
     createTarefas,
@@ -9,11 +11,14 @@ const {
     getTarefa
 } = require('../controllers/tarefas.controller');
 
-router.post('/tarefas', createTarefas);
-router.put('/tarefas/:id', updateTarefas);
-router.delete('/tarefas/:id', deleteTarefas);
-router.get('/tarefas', getTarefas);
-router.get('/tarefas/:id', getTarefa);
+
+
+router.post('/tarefas', auth.controlaAcessoAdmin, createTarefas);
+
+router.put('/tarefas/:id', auth.controlaAcessoAdmin, updateTarefas);
+router.delete('/tarefas/:id', auth.controlaAcessoAdmin, deleteTarefas);
+router.get('/tarefas', auth.controlaAcesso, getTarefas);
+router.get('/tarefas/:id', auth.controlaAcesso, getTarefa);
 
 
 

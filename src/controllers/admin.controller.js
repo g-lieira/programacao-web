@@ -1,11 +1,11 @@
-const user = require('../models/user');
+const admin = require('../models/admin');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
 
-    createUsers: async(req, res) => {
+    createAdmins: async(req, res) => {
 
         //verificando se o email já foi cadastrado
             user.findOne({
@@ -26,17 +26,17 @@ module.exports = {
                             });
                         } else {
                             //criando um novo usuario
-                            const novoUsuario = new user({
+                            const novoAdmin = new user({
                                 name: req.body.name,
                                 email: req.body.email,
                                 password: hash
                             });
-                            novoUsuario
+                            novoAdmin
                             .save() 
                             .then(result => { //cadastro funcionou
                                 console.log(result);
                                 res.status(201).json({
-                                    message: 'Usuario criado'
+                                    message: 'Admin criado'
                                 });
                             })
                             .catch(err => { //cadastro não funcionou
@@ -51,31 +51,11 @@ module.exports = {
                     
                 }
             
-            })
-            
-
-        
-        /*
-        //cadastro de usuário sem criptografia(hash)
-        try {
-            const {name, email, password} = req.body;
-            const novoUsuario = await user.create({
-                name,
-                email,
-                password
             });
-
-            res.json(novoUsuario);
-        } catch (error) {
-            return res.status(500).json({
-                message: error.message
-            });
-        }
-        */
         
     },
 
-    deleteUsers: async(req, res) => {
+    deleteAdmins: async(req, res) => {
         const {id} = req.params;
         try {
             await user.destroy({
@@ -89,7 +69,7 @@ module.exports = {
         }
     },
 
-    loginUsers: async(req, res) => {
+    loginAdmins: async(req, res) => {
         user.findOne({
             where: {
                 email: req.body.email
@@ -110,7 +90,7 @@ module.exports = {
                     const token = jwt.sign({
                         email: User.email
                     }, 
-                    process.env.JWT_KEY,
+                    process.env.JWT_KEY_ADMIN,
                     {
                         expiresIn: "1h"
                     });

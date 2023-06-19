@@ -9,6 +9,7 @@ const sequelize = require("./database/database");
 const projetosRoutes = require('./routes/projetos.routes');
 const tarefasRoutes = require('./routes/tarefas.routes');
 const userRoutes = require('./routes/user.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 
 //middlewares
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(projetosRoutes);
 app.use(tarefasRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
 
 
 async function main(){
