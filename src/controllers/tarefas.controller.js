@@ -24,6 +24,29 @@ module.exports = {
     },
 
     getTarefas: async(req, res) => {
+        
+        const {limite, pagina} = req.query;
+
+        try {
+            //calcular o deslocamento offset com base na página e no limite
+            const offset = (pagina-1)*limite;
+            //offset -> determina a partir de qual registro a consulta deve retornar dados
+
+            const tarefas = await tarefa.findAll({ //findAll -> gera um consulta SELECT para recuperar todas as entradas da tabela
+                //restringindo a busca do findAll
+                limit: limite,
+                offset: offset
+            });
+            res.json(tarefas)
+
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
+        }
+        
+        /*
+        //ver todos os registros
         try {
             const tarefas = await tarefa.findAll();
             res.json(tarefas);
@@ -31,7 +54,7 @@ module.exports = {
             return res.status(500).json({
                 message: error.message
             })
-        }
+        }*/
     },
 
     updateTarefas: async(req, res) => {

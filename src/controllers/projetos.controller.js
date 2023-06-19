@@ -1,19 +1,48 @@
 const projeto = require("../models/projeto");
 const tarefa = require("../models/tarefas");
 
+const { paginate } = require('sequelize-pagination');
+
 
 //exporta para routes/projetos.routes.js
 module.exports = {
     //ver todos os projetos adicionados
     getProjetos:  async(req, res) => {
+
+        const {limite, pagina} = req.query;
+
+        try {
+            //calcular o deslocamento offset com base na página e no limite
+            const offset = (pagina-1)*limite;
+            //offset -> determina a partir de qual registro a consulta deve retornar dados
+
+            const projetos = await projeto.findAll({ //findAll -> gera um consulta SELECT para recuperar todas as entradas da tabela
+                //restringindo a busca do findAll
+                limit: limite,
+                offset: offset
+            });
+            res.json(projetos)
+
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
+        }
+
+        
+
+        /*
+        // para ver todos os registros
         try{
             const projetos = await projeto.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
             res.json(projetos);
+            
         }catch (error) {
             return res.status(500).json({
                 message: error.message
             });
-        }
+        }*/
+
     },
 
     //inserir novos projetos
@@ -113,25 +142,7 @@ module.exports = {
             });
         }
         
-    },
-
-    getElementById: async(req, res) => {
-        const {id} = req.params;
-        let pos = this.getPositionById(id)
-        if (pos >= 0) {
-            return tarefa[pos];
-        }
-        return null;
-    },
-    getPositionById: async(req, res) => {
-        const {id} = req.params;
-        for (let i = 0; i<tasks.length; i++) {
-            if (tasks[i].id == id) {
-                return i;
-            }
-        }
-        return -1;
-    },
+    }
 
 }
 

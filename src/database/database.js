@@ -2,12 +2,12 @@ const Sequelize = require("sequelize");
 
 //banco de dados criado no pgadmin
 const sequelize = new Sequelize(
-    'prog-web', //nome db
-    'postgres', //user
-    'glieira009', //senha
+    process.env.DB_NAME, //nome db
+    process.env.DB_USER, //user
+    process.env.DB_PASSWORD, //senha
     {
-    host: 'localhost',
-    dialect: 'postgres'
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT
 });
 
 module.exports = sequelize;

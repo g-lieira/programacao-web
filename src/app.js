@@ -1,5 +1,9 @@
+require("dotenv").config();
 const express = require('express');
 const app = express();
+
+const sequelize = require("./database/database");
+// var db = require("./database/database"), sequelize=db.sequelize;
 
 //importando rotas
 const projetosRoutes = require('./routes/projetos.routes');
@@ -14,22 +18,17 @@ app.use(projetosRoutes);
 app.use(tarefasRoutes);
 
 
-
-
-
-
-
-//execução
-
-const sequelize = require("./database/database");
-// var db = require("./database/database"), sequelize=db.sequelize;
-
-async function main() {
+app.get("/api", async(req, res) => {
         await sequelize.sync({force: true});
         //sync -> cria campos não existentes, tipo para ver a ultima modificação feita
         //force -> toda vez exclui esses campos não existentes e cria novamente
-        app.listen(3000);
-        console.log("Running...");
-}
-main();
 
+        res.json({
+                success:1,
+                message: 'funcionando login'
+        });
+});
+
+app.listen(process.env.APP_PORT, () => {
+        console.log("running..PORT", process.env.APP_PORT)
+});

@@ -13,16 +13,16 @@ const {
 const router = express.Router();
 
 //salvar
-router.post("/projetos", createProjetos, getElementById, getPositionById)
+router.post("/projetos", createProjetos)
 
 //pegar todos os projetos
 router.get("/projetos", getProjetos)
 
 //atualizar um único projeto, precisa passar id 
-router.put("/projetos/:id", updateProjetos, getElementById, getPositionById)
+router.put("/projetos/:id", updateProjetos)
 
 //deletar um único projeto, precisa passar o id
-router.delete("/projetos/:id", deleteProjetos, getElementById, getPositionById)
+router.delete("/projetos/:id", deleteProjetos)
 
 //pegar um só projeto indicando o id
 router.get("/projetos/:id", getProjeto)
