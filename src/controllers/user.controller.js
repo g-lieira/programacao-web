@@ -1,15 +1,16 @@
-const user = require('../models/user');
+const User = require('../models/user');
 
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { put } = require('../routes/user.routes');
 
 module.exports = {
 
     createUsers: async(req, res) => {
 
         //verificando se o email já foi cadastrado
-            user.findOne({
+            User.findOne({
                 where: {
                     email: req.body.email
                 }
@@ -27,7 +28,7 @@ module.exports = {
                             });
                         } else {
                             //criando um novo usuario
-                            const novoUsuario = new user({
+                            const novoUsuario = new User({
                                 name: req.body.name,
                                 email: req.body.email,
                                 password: hash
@@ -78,7 +79,7 @@ module.exports = {
 
     getUsers: async(req, res) => {
         try{
-            const users = await user.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
+            const users = await User.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
             res.json(users);
             
         }catch (error) {
@@ -91,7 +92,7 @@ module.exports = {
     deleteUsers: async(req, res) => {
         const {id} = req.params;
         try {
-            await user.destroy({
+            await User.destroy({
                 where: { id }
             });
             return res.sendStatus(204);
@@ -106,7 +107,7 @@ module.exports = {
         const {id} = req.params;
 
         try {
-            const users = await user.findOne({
+            const users = await User.findOne({
                 where: {id}
             });
             users.set(req.body);
@@ -119,40 +120,91 @@ module.exports = {
         }
     },
 
-    /*
     updateMyUser: async(req, res) => {
-        const {id} = req.params;
-
-        if (req.body.id !== parseInt(id)) {
-            return res.status(403).json({ message: 'Acesso negado' });
-        }
+        
+        
         
         try {
-            const users = user.findOne({
-                where: {id}
-            });
-            users.set(req.body);
-            users.save();
-            return res.json(users);
+            const name = req.params.name
+            const {email, password} = req.body;
+            let bearer = req.headers['authorization'] || ''
+            let aux = bearer.split(' ')
+            let token = ''
+            if (aux[0] == 'Bearer') {
+                token = aux[1]
+            }
+            if(!token){
+                return res.status(401).json({
+                    message: "Informe um token"
+                })
+            }
+
+            jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
+                if(err){
+                    return res.status(401).json({
+                        message: err
+                    })
+                }
+
+                const usuario = await User.findOne({
+                    where: {
+                        name: decoded.name
+                    }
+                })
+
+                if(usuario.name !== name){
+                    return res.status(403).json({
+                        message: "Proibido alterar dados de outro usuário"
+                    })
+                }
+
+                
+                const editUser = await User.findOne({
+                    where: {name}
+                });
+
+                if(!editUser){
+                    return res.status(401).json({
+                        message: "Usuário não encontrado"
+                    })
+                }
+
+                editUser.email = email;
+
+                if(password){
+                    const passHash = await bcrypt.hash(password, 10)
+                    editUser.password = passHash
+                }
+
+                await editUser.save()
+                res.status(200).json({
+                    message: editUser
+                })
+
+            })
+            
         } catch (error) {
             return res.status(500).json({
                 message: error.message
             })
         }
-    },*/
+        
+        
+    },
 
     loginUsers: async(req, res) => {
-        user.findOne({
+        User.findOne({
             where: {
+                name: req.body.name,
                 email: req.body.email
             }
-        }).then(User => {
-            if(!User){ 
+        }).then(usuario => {
+            if(!usuario){ 
                 return res.status(401).json({ 
                     message: 'Falha na autenticação 1' 
                 });
             }
-            bcrypt.compare(req.body.password, User.password, (err, result) => {
+            bcrypt.compare(req.body.password, usuario.password, (err, result) => {
                 if(err || !result){
                     return res.status(401).json({
                         message: 'Falha na autenticação 2'
@@ -160,7 +212,8 @@ module.exports = {
                 }
                 if(result){
                     const token = jwt.sign({
-                        email: User.email
+                        name: usuario.name,
+                        email: usuario.email
                     }, 
                     process.env.JWT_KEY,
                     {

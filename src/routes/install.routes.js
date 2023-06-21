@@ -3,6 +3,6 @@ const router = express.Router();
 
 const {addProject, addTasks, addUsers, addAdmin} = require('../controllers/install.controller');
 
-router.get("/install", addProject, addTasks, addUsers, addAdmin)
+router.get("/install", addUsers, addAdmin, addProject, addTasks )
 
 module.exports = router;
