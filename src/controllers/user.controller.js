@@ -3,7 +3,6 @@ const User = require('../models/user');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { put } = require('../routes/user.routes');
 
 module.exports = {
 
@@ -120,13 +119,13 @@ module.exports = {
         }
     },
 
+    //usuário consegue atualizar seus próprios dados
     updateMyUser: async(req, res) => {
-        
-        
-        
         try {
             const name = req.params.name
             const {email, password} = req.body;
+
+            //verificação do token
             let bearer = req.headers['authorization'] || ''
             let aux = bearer.split(' ')
             let token = ''
@@ -146,6 +145,7 @@ module.exports = {
                     })
                 }
 
+                //verificar se o nome escrito é o mesmo que esta logado
                 const usuario = await User.findOne({
                     where: {
                         name: decoded.name
@@ -158,7 +158,7 @@ module.exports = {
                     })
                 }
 
-                
+                //verificar se o usuário existe
                 const editUser = await User.findOne({
                     where: {name}
                 });
@@ -169,6 +169,7 @@ module.exports = {
                     })
                 }
 
+                //edição de email e senha
                 editUser.email = email;
 
                 if(password){
@@ -201,13 +202,13 @@ module.exports = {
         }).then(usuario => {
             if(!usuario){ 
                 return res.status(401).json({ 
-                    message: 'Falha na autenticação 1' 
+                    message: 'Usuário não encontrado' 
                 });
             }
             bcrypt.compare(req.body.password, usuario.password, (err, result) => {
                 if(err || !result){
                     return res.status(401).json({
-                        message: 'Falha na autenticação 2'
+                        message: 'Falha na autenticação'
                     });
                 }
                 if(result){

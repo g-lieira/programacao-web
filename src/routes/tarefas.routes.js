@@ -13,11 +13,12 @@ const {
 
 
 
-router.post('/tarefas', auth.controlaAcessoAdmin, createTarefas);
-router.put('/tarefas/:id', auth.controlaAcessoAdmin, updateTarefas);
-router.delete('/tarefas/:id', auth.controlaAcessoAdmin, deleteTarefas);
-router.get('/tarefas', auth.controlaAcesso, auth.controlaAcessoAdmin, getTarefas);
-router.get('/tarefas/:id', auth.controlaAcesso, auth.controlaAcessoAdmin, getTarefa);
+router.post('/tarefas', auth.controlaAcessoAdmin, createTarefas); //admins add tarefas
+router.put('/tarefas/:id', auth.controlaAcessoAdmin, updateTarefas); //admins atualizam tarefas
+router.delete('/tarefas/:id', auth.controlaAcessoAdmin, deleteTarefas); //admins deletam tarefas
+//todos podem ver as tarefas
+router.get('/tarefas', auth.controlaAcesso, getTarefas); 
+router.get('/tarefas/:id', auth.controlaAcesso, getTarefa);
 
 
 

@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 
 const sequelize = require("./database/database");
-// var db = require("./database/database"), sequelize=db.sequelize;
 
 //importando rotas
 const projetosRoutes = require('./routes/projetos.routes');
@@ -29,7 +28,7 @@ app.use(installRoutes);
 async function main(){
         await sequelize.sync({force: false});
         //sync -> cria campos não existentes, tipo para ver a ultima modificação feita
-        //force -> toda vez exclui esses campos não existentes e cria novamente
+        //force -> toda vez exclui esses campos não existentes e cria novamente se true
 
         app.listen(process.env.APP_PORT, () => {
                 console.log("running..PORT", process.env.APP_PORT)

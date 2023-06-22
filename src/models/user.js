@@ -2,6 +2,7 @@ const DataTypes = require("sequelize");
 
 const sequelize = require("../database/database");
 
+//criação da tabela de usuários
 const users = sequelize.define("users", {
     id: {
         type: DataTypes.INTEGER,

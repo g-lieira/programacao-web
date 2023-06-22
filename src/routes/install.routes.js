@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {addProject, addTasks, addUsers, addAdmin} = require('../controllers/install.controller');
+//importa os controllers
+const {
+    addProject, 
+    addTasks, 
+    addUsers, 
+    addAdmin
+} = require('../controllers/install.controller');
 
-router.get("/install", addUsers, addAdmin, addProject, addTasks )
+router.get("/install", addUsers, addAdmin, addProject, addTasks ) //instalação do banco e inserção de dados
 
 module.exports = router;

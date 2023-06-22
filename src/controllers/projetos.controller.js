@@ -1,8 +1,6 @@
 const projeto = require("../models/projeto");
 const tarefa = require("../models/tarefas");
 
-const { paginate } = require('sequelize-pagination');
-
 
 //exporta para routes/projetos.routes.js
 module.exports = {
@@ -16,7 +14,7 @@ module.exports = {
             const offset = (pagina-1)*limite;
             //offset -> determina a partir de qual registro a consulta deve retornar dados
 
-            const projetos = await projeto.findAll({ //findAll -> gera um consulta SELECT para recuperar todas as entradas da tabela
+            const projetos = await projeto.findAll({ //findAll -> gera uma consulta SELECT para recuperar todas as entradas da tabela
                 //restringindo a busca do findAll
                 limit: limite,
                 offset: offset
@@ -32,7 +30,7 @@ module.exports = {
         
 
         /*
-        // para ver todos os registros
+        // para ver todos os registros sem indicar limite e página
         try{
             const projetos = await projeto.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
             res.json(projetos);
@@ -77,7 +75,7 @@ module.exports = {
 
             //caso o projeto não exista
             if(!project) return res.status(404).json({
-                message: 'projeto não encontrado'
+                message: 'Projeto não encontrado'
             })
 
             res.json(project);
@@ -102,7 +100,7 @@ module.exports = {
             project.priority = priority;
             project.description = description;
 
-            await project.save();
+            await project.save(); //salva na tabela
 
             res.json(project);
 
@@ -129,6 +127,7 @@ module.exports = {
         }
     },
 
+    //busca de todas as tarefas relacionadas a aquele projeto
     getProjetoTarefa: async(req, res) => {
         const {id} = req.params;
         try {

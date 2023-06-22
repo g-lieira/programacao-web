@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 
+//controle de acessos às tabelas
 module.exports = {
 
     controlaAcesso: function (req, res, next) {
+        //verificação de token
         let bearer = req.headers['authorization'] || ''
         let aux = bearer.split(' ')
         let token = ''
@@ -13,7 +15,7 @@ module.exports = {
 
         jwt.verify(token, process.env.JWT_KEY, (err, obj) => {
             if (err) {
-                return res.status(403).json({status:false, mensagem:"Acesso negado"})
+                return res.status(403).json({status:false, mensagem:"Acesso negado"}) //token não aceito
             }
             req.user = obj.id
             next()

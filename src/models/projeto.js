@@ -3,7 +3,7 @@ const DataTypes = require("sequelize");
 const sequelize = require("../database/database");
 const tarefas = require('./tarefas');
 
-
+//criação da tabela projetos
 const projeto = sequelize.define('projetos', { //define o nome da tabela
     //campos da tabela definidos abaixo
     // também é definido a caracteristica de cada campo
@@ -26,14 +26,16 @@ const projeto = sequelize.define('projetos', { //define o nome da tabela
     timestamps: false
 });
 
+
+//relacionamento entre tabelas
 projeto.hasMany(tarefas, {
     foreingKey: 'projetoId',
     sourceKey: 'id'
-}); //projeto tem muitos de outro modelo
+}); //projeto tem muitos de outro modelo, nesse caso tarefas
 
 tarefas.belongsTo(projeto, {
     foreingKey: 'projetoId',
     targetId: 'id'
-}); //tarefa tem apenas um outros modelo
+}); //tarefa tem apenas um outros modelo, nesse caso projeto
 
 module.exports = projeto;

@@ -2,6 +2,8 @@ const DataTypes = require("sequelize");
 
 const sequelize = require("../database/database");
 
+
+//criação da tabela de admin
 const admins = sequelize.define("admins", {
     id: {
         type: DataTypes.INTEGER,

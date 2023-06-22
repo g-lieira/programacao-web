@@ -14,7 +14,7 @@ module.exports = {
                 }
                 
             }).then(existeAdmin => {
-                if(existeAdmin){ //se encontrar usuário significa que já existe o email
+                if(existeAdmin){ //se encontrar significa que já existe o email
                     return res.status(409).json({ //409 significa que há conflitos
                         message: 'Email já existente' //nesse caso conflito de email já existente
                     });
@@ -25,7 +25,7 @@ module.exports = {
                                 error: err
                             });
                         } else {
-                            //criando um novo usuario
+                            //criando um novo admin
                             const novoAdmin = new admin({
                                 name: req.body.name,
                                 email: req.body.email,
@@ -58,7 +58,7 @@ module.exports = {
     deleteAdmins: async(req, res) => {
         const {id} = req.params;
         try {
-            await admin.destroy({
+            await admin.destroy({ //método destroy para excluir o registro indicado pelo id
                 where: { id }
             });
             return res.sendStatus(204);
@@ -75,24 +75,24 @@ module.exports = {
                 email: req.body.email
             }
         }).then(Admin => {
-            if(!Admin){ 
+            if(!Admin){  //se não existir o email informado
                 return res.status(401).json({ 
                     message: 'Falha na autenticação 1' 
                 });
             }
-            bcrypt.compare(req.body.password, Admin.password, (err, result) => {
+            bcrypt.compare(req.body.password, Admin.password, (err, result) => { //comparar a senha digitada com a senha criptografada para validar
                 if(err || !result){
                     return res.status(401).json({
                         message: 'Falha na autenticação 2'
                     });
                 }
                 if(result){
-                    const token = jwt.sign({
+                    const token = jwt.sign({ //gerar o token
                         email: Admin.email
                     }, 
                     process.env.JWT_KEY_ADMIN,
                     {
-                        expiresIn: "1h"
+                        expiresIn: "190h"
                     });
                     return res.status(200).json({
                         message: 'Autenticação sucedida',

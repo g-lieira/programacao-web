@@ -1,5 +1,3 @@
-const install = require('../routes/install.routes');
-
 const projeto = require('../models/projeto');
 const tarefa = require('../models/tarefas');
 const user = require('../models/user');
@@ -10,8 +8,9 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
     addAdmin: async(req, res) => {
+        await sequelize.sync({force: true}) //cria a tabela
         try {
-            user.findOne({
+            user.findOne({ //verifica se esse email não ja existe
                 where: {
                     email: "adminMaster@test.com"
                 }
@@ -27,7 +26,7 @@ module.exports = {
             const password = "adminMaster"
             const passHash = await bcrypt.hash(password, 10) //criptografar a senha
 
-            const addAdmin = await admin.create({
+            const addAdmin = await admin.create({ //criação do admin master (fixo)
                 name: "Admin Master",
                 email: "adminMaster@test.com",
                 password: passHash
@@ -54,7 +53,8 @@ module.exports = {
             {name: 'Maju', email: 'maju@test.com', password: 'majutest'}
         ];
 
-        const userHash = await Promise.all(
+        //criptografando as senhas
+        const userHash = await Promise.all( 
             users.map(async (usuario) => {
                 const hash = await bcrypt.hash(usuario.password, 10)
                 return {...usuario, password: hash}
@@ -62,9 +62,9 @@ module.exports = {
         );
 
 
-        await user.bulkCreate(userHash)
+        await user.bulkCreate(userHash) //inserção de registro na tabela 
         .then(() => { //cadastro funcionou
-            next();
+            next(); 
         });
     },
 

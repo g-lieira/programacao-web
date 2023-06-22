@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require('../helpers/auth');
 
+//importa os controllers
 const {
     createAdmins,
     deleteAdmins,
@@ -10,11 +11,11 @@ const {
 } = require('../controllers/admin.controller');
 
 
-router.post('/admin',  createAdmins); //adicionar o auth.controlaAcessoAdmin
+router.post('/admin', auth.controlaAcessoAdmin, createAdmins); //somente admin pode adicionar novos admins
 
-router.delete('/admin/:id', auth.controlaAcessoAdmin, deleteAdmins);
+router.delete('/admin/:id', auth.controlaAcessoAdmin, deleteAdmins); //somente admin pode deletar outros admins
 
-router.post('/admin/login', loginAdmins);
+router.post('/admin/login', loginAdmins); //login
 
 
 module.exports = router;

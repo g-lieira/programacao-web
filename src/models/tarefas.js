@@ -2,6 +2,8 @@ const DataTypes = require("sequelize");
 
 const sequelize = require("../database/database");
 
+
+//criação da tabela tarefas
 const tarefa = sequelize.define("tarefas", {
     id: {
         type: DataTypes.INTEGER,

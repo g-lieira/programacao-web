@@ -3,6 +3,7 @@ const tarefa = require('../models/tarefas');
 
 module.exports = {
 
+    //criação de registros
     createTarefas: async(req, res) => {
 
         try {
@@ -46,7 +47,7 @@ module.exports = {
         }
         
         /*
-        //ver todos os registros
+        //ver todos os registros sem limite e página
         try {
             const tarefas = await tarefa.findAll();
             res.json(tarefas);
@@ -57,6 +58,7 @@ module.exports = {
         }*/
     },
 
+    //atualização de dados (teste de maneira diferente)
     updateTarefas: async(req, res) => {
         const {id} = req.params;
 
@@ -64,7 +66,7 @@ module.exports = {
             const task = await tarefa.findOne({
                 where: {id}
             });
-            task.set(req.body);
+            task.set(req.body); //pega os dados escritos no body
             await task.save();
             return res.json(task);
         } catch (error) {
