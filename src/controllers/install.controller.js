@@ -7,39 +7,7 @@ const sequelize = require("../database/database");
 const bcrypt = require('bcrypt');
 
 module.exports = {
-    addAdmin: async(req, res) => {
-        await sequelize.sync({force: true}) //cria a tabela
-        try {
-            user.findOne({ //verifica se esse email não ja existe
-                where: {
-                    email: "adminMaster@test.com"
-                }
-                
-            }).then(existeAdmin => {
-                if(existeAdmin){ //se encontrar admin significa que já existe o email
-                    return res.status(409).json({ //409 significa que há conflitos
-                        message: 'Email já existente' //nesse caso conflito de email já existente
-                    });
-                }
-            })
-
-            const password = "adminMaster"
-            const passHash = await bcrypt.hash(password, 10) //criptografar a senha
-
-            const addAdmin = await admin.create({ //criação do admin master (fixo)
-                name: "Admin Master",
-                email: "adminMaster@test.com",
-                password: passHash
-            })
-
-            res.status(201).json(addAdmin)
-            
-        } catch (error) {
-            return res.status(500).json({
-                message: error.message
-            });
-        }
-    },
+    
 
     addUsers: async(req, res, next) => {
         await sequelize.sync({force: true}) //cria a tabela
@@ -63,13 +31,14 @@ module.exports = {
 
 
         await user.bulkCreate(userHash) //inserção de registro na tabela 
+        
         .then(() => { //cadastro funcionou
             next(); 
         });
     },
 
     addProject: async(req, res, next) => {
-        await sequelize.sync({force: true}) //cria a tabela
+       
 
 
         //adição de dados na tabela projetos
@@ -95,11 +64,11 @@ module.exports = {
     },
 
     addTasks: async (req, res, next) => {
-        await sequelize.sync({force: true}) //cria a tabela
+       
 
          //adição de dados na tabela tarefas
          const tarefas = [
-            {projetoId: 1, name: 'Página de posts', done: false},
+            {name: 'Página de posts', done: false, projetoId: 1},
             {projetoId: 2, name: 'Página de sobre nós', done: true},
             {projetoId: 3, name: 'CRUD de funcionários', done: true},
             {projetoId: 3, name: 'CRUD dos animais', done: false},
@@ -119,5 +88,39 @@ module.exports = {
        
     },
        
+    addAdmin: async(req, res, next) => {
+        
+        try {
+            user.findOne({ //verifica se esse email não ja existe
+                where: {
+                    email: "adminMaster@test.com"
+                }
+                
+            }).then(existeAdmin => {
+                if(existeAdmin){ //se encontrar admin significa que já existe o email
+                    return res.status(409).json({ //409 significa que há conflitos
+                        message: 'Email já existente' //nesse caso conflito de email já existente
+                    });
+                }
+            })
+
+            const password = "adminMaster"
+            const passHash = await bcrypt.hash(password, 10) //criptografar a senha
+
+            const addAdmin = await admin.create({ //criação do admin master (fixo)
+                name: "Admin Master",
+                email: "adminMaster@test.com",
+                password: passHash
+            })
+
+            
+            return res.json(addAdmin)
+            
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            });
+        }
+    },
     
 }

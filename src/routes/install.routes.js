@@ -9,6 +9,6 @@ const {
     addAdmin
 } = require('../controllers/install.controller');
 
-router.get("/install", addUsers, addAdmin, addProject, addTasks ) //instalação do banco e inserção de dados
+router.get("/install",  addUsers, addProject, addTasks, addAdmin ) //instalação do banco e inserção de dados
 
 module.exports = router;

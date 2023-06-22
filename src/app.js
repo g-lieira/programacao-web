@@ -26,7 +26,7 @@ app.use(installRoutes);
 
 
 async function main(){
-        await sequelize.sync({force: false});
+        await sequelize.sync({force: true});
         //sync -> cria campos não existentes, tipo para ver a ultima modificação feita
         //force -> toda vez exclui esses campos não existentes e cria novamente se true
 
