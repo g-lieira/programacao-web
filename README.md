@@ -38,7 +38,7 @@ GET /install
 - Tabelas de projetos e tarefas
 
 
-Atenção: somente ADMINS podem alterar, deletar e atualizar. É preciso inserir o token admin.
+Atenção: somente ADMINS podem alterar, deletar e atualizar. É preciso inserir o token de admin.
   
 ```
 POST /projetos
@@ -50,12 +50,7 @@ DELETE /tarefas/:id
 PUT /tarefas/:id
 ```
 
-
-
 Listar + paginação, busca individual e busca por relacionamento da tabela projetos. É preciso inserir o token de usuário.
-
-
-
 
 ```
 GET /projetos?limite=5&pagina=1
