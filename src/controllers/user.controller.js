@@ -104,14 +104,31 @@ module.exports = {
 
     updateUsers: async(req, res) => {
         const {id} = req.params;
+        const {name, email, password} = req.body;
 
         try {
             const users = await User.findOne({
                 where: {id}
             });
-            users.set(req.body);
-            await users.save();
-            return res.json(users);
+
+            if(!users){
+                return res.status(401).json({
+                    message: "Usuário não encontrado"
+                })
+            }
+
+            users.name = name;
+            users.email = email;
+
+            if(password){
+                const passHash = await bcrypt.hash(password, 10)
+                users.password = passHash
+            }
+
+            await users.save()
+            res.status(200).json({
+                message: users
+            })
         } catch (error) {
             return res.status(500).json({
                 message: error.message
