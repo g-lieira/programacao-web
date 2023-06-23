@@ -54,6 +54,18 @@ module.exports = {
             });
         
     },
+    
+    getAdmins: async(req, res) => {
+        try{
+            const admins = await admin.findAll(); //findAll -> consulta SELECT para recuperar todas as entradas da tabela
+            res.json(admins);
+            
+        }catch (error) {
+            return res.status(500).json({
+                message: error.message
+            });
+        }
+    },
 
     deleteAdmins: async(req, res) => {
         const {id} = req.params;
@@ -66,6 +78,40 @@ module.exports = {
             return res.sendStatus(500).json({
                 message: error.message
             });
+        }
+    },
+
+    updateAdmins: async(req, res) => {
+        const {id} = req.params;
+        const {name, email, password} = req.body;
+
+        try {
+            const admins = await admin.findOne({
+                where: {id}
+            });
+
+            if(!admins){
+                return res.status(401).json({
+                    message: "Usuário não encontrado"
+                })
+            }
+
+            admins.name = name;
+            admins.email = email;
+
+            if(password){
+                const passHash = await bcrypt.hash(password, 10)
+                admins.password = passHash
+            }
+
+            await admins.save()
+            res.status(200).json({
+                message: admins
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
         }
     },
 
