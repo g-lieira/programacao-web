@@ -7,13 +7,19 @@ const auth = require('../helpers/auth');
 const {
     createAdmins,
     deleteAdmins,
-    loginAdmins
+    loginAdmins,
+    getAdmins,
+    updateAdmins
 } = require('../controllers/admin.controller');
 
+//somente admins podem realizar as rotas abaixo
+router.post('/admin', auth.controlaAcessoAdmin, createAdmins); 
 
-router.post('/admin', auth.controlaAcessoAdmin, createAdmins); //somente admin pode adicionar novos admins
+router.get('/admin', auth.controlaAcessoAdmin, getAdmins); 
 
-router.delete('/admin/:id', auth.controlaAcessoAdmin, deleteAdmins); //somente admin pode deletar outros admins
+router.put('/admin/:id', auth.controlaAcessoAdmin, updateAdmins);
+
+router.delete('/admin/:id', auth.controlaAcessoAdmin, deleteAdmins); 
 
 router.post('/admin/login', loginAdmins); //login
 
