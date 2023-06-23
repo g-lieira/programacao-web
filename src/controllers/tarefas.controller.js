@@ -94,8 +94,7 @@ module.exports = {
         const {id} = req.params;
         try {
             const task = await tarefa.findOne({
-                where: { id },
-                attributes: ['name'] //retorna somente o nome da tarefa
+                where: { id }
             });
             res.json(task)
         } catch (error) {
