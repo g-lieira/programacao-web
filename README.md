@@ -16,4 +16,4 @@ git clone [link do repositório]
 git checkout develop
 ```
 
-3. Siga as instruções ditas na branch
+3. Siga as instruções ditas no readme da branch
