@@ -17,8 +17,8 @@ router.post('/tarefas', auth.controlaAcessoAdmin, createTarefas); //admins add t
 router.put('/tarefas/:id', auth.controlaAcessoAdmin, updateTarefas); //admins atualizam tarefas
 router.delete('/tarefas/:id', auth.controlaAcessoAdmin, deleteTarefas); //admins deletam tarefas
 //todos podem ver as tarefas
-router.get('/tarefas', getTarefas); 
-router.get('/tarefas/:id', getTarefa);
+router.get('/tarefas', auth.controlaAdminEuser, getTarefas); 
+router.get('/tarefas/:id', auth.controlaAdminEuser, getTarefa);
 
 
 

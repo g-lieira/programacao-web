@@ -7,25 +7,33 @@ module.exports = {
     //ver todos os projetos adicionados
     getProjetos:  async(req, res) => {
 
-        const {limite, pagina} = req.query;
+        const limite = parseInt(req.query.limite)
+        const pagina = parseInt(req.query.pagina);
 
-        try {
-            //calcular o deslocamento offset com base na página e no limite
-            const offset = (pagina-1)*limite;
-            //offset -> determina a partir de qual registro a consulta deve retornar dados
-
-            const projetos = await projeto.findAll({ //findAll -> gera uma consulta SELECT para recuperar todas as entradas da tabela
-                //restringindo a busca do findAll
-                limit: limite,
-                offset: offset
-            });
-            res.json(projetos)
-
-        } catch (error) {
+        if(Number.isInteger(limite) && Number.isInteger(pagina)) {
+            if(limite == 5 || limite == 10 || limite == 30 && pagina > 0){
+                //calcular o deslocamento offset com base na página e no limite
+                const offset = (pagina-1)*limite;
+                //offset -> determina a partir de qual registro a consulta deve retornar dados
+    
+                const projetos = await projeto.findAll({ //findAll -> gera uma consulta SELECT para recuperar todas as entradas da tabela
+                    //restringindo a busca do findAll
+                    limit: limite,
+                    offset: offset
+                });
+                res.json(projetos)
+            } else {
+                return res.status(500).json({
+                    message: "Valores dos parametros inválidos"
+                })
+            }
+        } else {
             return res.status(500).json({
-                message: error.message
+                message: "Os valores não são inteiros"
             })
         }
+
+        
 
         
 
